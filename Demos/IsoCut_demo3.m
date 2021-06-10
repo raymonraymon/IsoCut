@@ -15,7 +15,7 @@ if nargin<1 || isempty(iv)
     iv=0.6;
 elseif ~isnumeric(iv) || ~isscalar(iv) || iv<0.01 || iv>0.99 
     iv=0.6;
-    fprintf(2,"Invalid entry for 'iv'. Using default setting iv=0.6.")
+    fprintf(2,['Invalid entry for' num2str(iv),'. Using default setting iv=0.6.']);
 end
 
 
@@ -47,14 +47,14 @@ F=F/(Fmax-Fmin);
 
 
 hf=figure('color','w');
-maximize_fig(hf);
+%maximize_fig(hf);
 
 avp.CameraPosition=[0.78239 0.56809 3.3353];
 avp.CameraTarget=[-0.016854 0.11474 0.0089778];
 avp.CameraUpVector=[-0.041601 0.99127 -0.12511];
 avp.CameraViewAngle=2.6;
 
-ha1=subtightplot(1,3,1);
+ha1=subplot(1,3,1);
 h=patch(TR); 
 set(h,'FaceColor',0.5*[1 1 1],'EdgeColor','k','FaceAlpha',0.95,'EdgeAlpha',1)
 axis equal
@@ -71,7 +71,7 @@ vis_cutting_plane(X,N,iv,ha1)
 set(Hc,'color','r','LineWidth',1)
 
 % Visulize modified mesh
-ha2=subtightplot(1,3,2);
+ha2=subplot(1,3,2);
 h=patch(TRc); 
 set(h,'FaceColor',0.5*[1 1 1],'EdgeColor','k','FaceAlpha',0.95,'EdgeAlpha',1)
 axis equal
@@ -97,7 +97,7 @@ TR2=struct('faces',TR2{1},'vertices',TR2{2});
 F2=Fc(chk_v);
 
 % Visulize retained portion of the mesh  
-ha3=subtightplot(1,3,3);
+ha3=subplot(1,3,3);
 h=patch(TR2); 
 set(h,'FaceColor',0.5*[1 1 1],'EdgeColor','k','FaceAlpha',0.95,'EdgeAlpha',1)
 axis equal
@@ -153,6 +153,6 @@ P=bsxfun(@plus,P*V',Xo);
 P=bsxfun(@plus,P,x_min*N' + iv*(x_max-x_min)*N'); 
 
 % Visualize
-h=patch(ha,'faces',[1 2 3 4],'vertices',P);
+h=patch('faces',[1 2 3 4],'vertices',P);
 set(h,'FaceColor','r','FaceAlpha',0.5,'EdgeColor','k','LineWidth',1)
 

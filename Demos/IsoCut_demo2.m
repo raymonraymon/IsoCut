@@ -17,14 +17,14 @@ if nargin<1 || isempty(k)
     k=1;
 elseif ~isnumeric(k) || ~isscalar(k) || k<1 || k>20 || k~=round(k)
     k=1;
-    fprintf(2,"Invalid entry for 'k'. Using default setting k=1.")
+    fprintf(2,['Invalid entry for ',num2str(k),'. Using default setting k=1.']);
 end
 
 if nargin<2 || isempty(a)
     a=0.9;
 elseif ~isnumeric(a) || ~isscalar(a) 
     a=0.9;
-    fprintf(2,"Invalid entry for 'a'. Using default setting a=0.9.")
+    fprintf(2,['Invalid entry for ',num2str(a),'. Using default setting a=0.9.']);
 end
 
 

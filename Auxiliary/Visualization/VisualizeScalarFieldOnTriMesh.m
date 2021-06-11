@@ -48,20 +48,20 @@ set(hm,'SpecularExponent',35,'SpecularStrength',0.15)
    
 ha=gca;
 colormap('jet')
-
-hb=colorbar;
+hb=[];
+%hb=colorbar;
 axis equal off vis3d
 hold on
-set(hb,'FontSize',30)
+%set(hb,'FontSize',30)
 
-if ~isempty(avp), MatchAxesView(avp,ha); end
-
-h1=camlight('headlight');
-set(h1,'style','infinite','position',10*get(h1,'position'))
-h2=light('position',-get(h1,'position'));
-set(h2,'style','infinite')
-lighting phong
-hl=[h1 h2];
+%if ~isempty(avp), MatchAxesView(avp,ha); end
+h1 =[];
+% h1=camlight('headlight');
+% set(h1,'style','infinite','position',10*get(h1,'position'))
+% h2=light('position',-get(h1,'position'));
+% set(h2,'style','infinite')
+% lighting phong
+% hl=[h1 h2];
 
 if flag && numel(unique(F))>1 
     set(ha,'CLimMode','manual','CLim',[min(F) max(F)]);    

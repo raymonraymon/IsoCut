@@ -1,3 +1,4 @@
+
 function IsoCut_demo3(iv)
 % Modify mesh connectivity so mesh contains edges conicident with a cut.
 %
@@ -6,7 +7,12 @@ function IsoCut_demo3(iv)
 %             0.01 and 0.99. iv=0.60 is the default setting.
 %             
 % AUTHOR: Anton Semechko (a.semechko@gmail.com)
-
+%%
+    clc
+    clear
+    close all
+    dbstop if error
+    warning off all
 
 %% Check the inputs
 % -------------------------------------------------------------------------
@@ -20,14 +26,25 @@ end
 
 
 %% Step 1: Load mesh
-TR=load('sample_meshes.mat','bunny');
-TR=TR.bunny;
-
-
-%% Step 2: Define cutting plane normal
-P=[ 0.034488  0.036484  0.006912; ...
+if 0
+    TR=load('sample_meshes.mat','bunny');
+    TR=TR.bunny;
+    P=[ 0.034488  0.036484  0.006912; ...
     0.019104  0.055041  0.047894; ...
    -0.008596  0.123650  0.033786];
+else
+    TR=load('sample_meshes.mat','bunny');
+    TR=TR.bunny;
+    [eV,eF]=readOBJ('Deci_result_30_0.02_7.6451.obj');
+    TR.faces=eF;
+    TR.vertices=eV;
+    P=[ -21.966      -9.3635      -8.9674; ...
+      -23.635      -6.3192       4.2091; ...
+      -17.919      -5.2826       10.671];
+end
+
+%% Step 2: Define cutting plane normal
+
 
 N=cross(P(1,:)-P(2,:),P(3,:)-P(2,:));
 N=N/norm(N);
@@ -96,6 +113,8 @@ TR2=RemoveNonRefVerts({Tri2 X});
 TR2=struct('faces',TR2{1},'vertices',TR2{2});
 F2=Fc(chk_v);
 
+writeOBJ('outer.obj', TR2.vertices, TR2.faces);
+
 % Visulize retained portion of the mesh  
 ha3=subplot(1,3,3);
 h=patch(TR2); 
@@ -122,37 +141,5 @@ set([ha1 ha2 ha3],'CLim',[0 1]) % enfore consistent color maps
 
 
 
-function vis_cutting_plane(X,N,iv,ha)
 
-N=N(:);
-
-
-Xo=mean(X,1);
-X=bsxfun(@minus,X,Xo);       % shift centroid to origin
-x=X*N;                       % distance to the plane
-dX=X - bsxfun(@times,x,N');  % subspace orthogonal to N
-
-% Principal vectors ortognal to cutting plane
-[V,~]=svd(dX'*dX);
-
-% Vertices of quadrilateral used to represent the cutting plane
-dY=dX*V;
-dYmin=min(dY);
-dYmax=max(dY);
-
-P1=dYmin;
-P2=[dYmax(1) dYmin(2) 0];
-P3=[dYmax(1) dYmax(2) 0];
-P4=[dYmin(1) dYmax(2) 0];
-P=1.15*[P1;P2;P3;P4];
-
-% Transform vertices back into the orignal frame 
-x_min=min(x);
-x_max=max(x);
-P=bsxfun(@plus,P*V',Xo);
-P=bsxfun(@plus,P,x_min*N' + iv*(x_max-x_min)*N'); 
-
-% Visualize
-h=patch('faces',[1 2 3 4],'vertices',P);
-set(h,'FaceColor','r','FaceAlpha',0.5,'EdgeColor','k','LineWidth',1)
 
